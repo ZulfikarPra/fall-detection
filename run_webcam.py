@@ -50,30 +50,37 @@ if __name__ == '__main__':
     ret_val, image = cam.read()
     logger.info('cam image=%dx%d' % (image.shape[1], image.shape[0]))
 
-    out = cv2.VideoWriter('output.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 10, (1280, 720))
-    from google.colab.patches import cv2_imshow
+    out = cv2.VideoWriter('output.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 10, (image.shape[1], image.shape[0]))
+
+    y1 = [0,0]
 
     while cam.isOpened():
         ret_val, image = cam.read()
         if not ret_val:
           out.release()
           break
-        #logger.debug('image process+')
         humans = e.inference(image, resize_to_default=(w > 0 and h > 0), upsample_size=args.resize_out_ratio)
 
-        #logger.debug('postprocess+')
         image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
-        #logger.debug('show+')
+        for human in humans:
+          for i in range(len(humans)):
+            try:
+              a = human.body_parts[0]
+              x = a.x*image.shape[1]
+              y = a.y*image.shape[0]
+              y1.append(y)
+            except:
+              pass
+            if((y - y1[-2]) > 30):
+              cv2.putText(image, "Fall Detected!", (20,80), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2, 11)
+
         cv2.putText(image,
                     "FPS: %f" % (1.0 / (time.time() - fps_time)),
                     (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (0, 255, 0), 2)
-        #tempImage = cv2.imwrite('output.jpg', image)
         out.write(image)
         fps_time = time.time()
         if cv2.waitKey(1) == 27:
             break
-        logger.debug('finished+')
-
-    cv2.destroyAllWindows()
+    logger.debug('finished processing!')
