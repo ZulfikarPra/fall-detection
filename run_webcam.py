@@ -45,7 +45,7 @@ if __name__ == '__main__':
         e = TfPoseEstimator(get_graph_path(args.model), target_size=(w, h), trt_bool=str2bool(args.tensorrt))
     else:
         e = TfPoseEstimator(get_graph_path(args.model), target_size=(432, 368), trt_bool=str2bool(args.tensorrt))
-    logger.debug('cam read+')
+    print("Please Wait! The Process could Takes a While to Finish!")
     cam = cv2.VideoCapture(args.camera)
     ret_val, image = cam.read()
     logger.info('cam image=%dx%d' % (image.shape[1], image.shape[0]))
@@ -53,7 +53,6 @@ if __name__ == '__main__':
     out = cv2.VideoWriter('output.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 24, (image.shape[1], image.shape[0]))
 
     y1 = [0,0]
-    print("Please Wait! The Process could Takes a While to Finish!")
     while cam.isOpened():
         ret_val, image = cam.read()
         if not ret_val:
