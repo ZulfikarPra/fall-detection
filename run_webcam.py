@@ -50,7 +50,7 @@ if __name__ == '__main__':
     ret_val, image = cam.read()
     logger.info('cam image=%dx%d' % (image.shape[1], image.shape[0]))
 
-    out = cv2.VideoWriter('output.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 30, (image.shape[1], image.shape[0]))
+    out = cv2.VideoWriter('output.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 24, (image.shape[1], image.shape[0]))
 
     y1 = [0,0]
     print("Please Wait! The Process could Takes a While to Finish!")
