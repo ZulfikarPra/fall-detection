@@ -53,7 +53,7 @@ if __name__ == '__main__':
     out = cv2.VideoWriter('output.avi', cv2.VideoWriter_fourcc('M','J','P','G'), 10, (image.shape[1], image.shape[0]))
 
     y1 = [0,0]
-
+    print("Please Wait! The Process could Takes a While to Finish!")
     while cam.isOpened():
         ret_val, image = cam.read()
         if not ret_val:
@@ -72,7 +72,7 @@ if __name__ == '__main__':
               y1.append(y)
             except:
               pass
-            if((y - y1[-2]) > 30):
+            if((y - y1[-2]) > 25):
               cv2.putText(image, "Fall Detected!", (20,80), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2, 11)
 
         cv2.putText(image,
@@ -83,4 +83,4 @@ if __name__ == '__main__':
         fps_time = time.time()
         if cv2.waitKey(1) == 27:
             break
-    logger.debug('finished processing!')
+    print("Process in Done!, File Name is output.avi")
